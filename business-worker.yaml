@@ -1,0 +1,178 @@
+########################################################################
+# section - config map
+########################################################################
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sas-business-orchestration-worker-sutraPOC
+  namespace: sfdprem
+data:
+  project.yaml: |-
+    id: helloWorld
+    version: v1
+    workloads:
+      - configurations: 
+          http: 
+            enabled: true
+        flows:
+          - inputs:
+              - httpServer:
+                  path: /helloWorld
+                  allowedVerbs:
+                    - GET
+            processors:
+              - map:
+                  mapping: |
+                    root = "{\"hello\":\"world\"}"
+            outputs:
+              - response: {}
+
+########################################################################
+# section - image pull secrets (optional)
+########################################################################
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sas-image-pull-secrets
+  namespace: sfdprem
+data:
+  .dockerconfigjson: {{ IMAGE_PULL_SECRET }}
+type: kubernetes.io/dockerconfigjson
+---
+
+########################################################################
+# section - service
+########################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: sas-business-orchestration-worker-sutraPOC
+  namespace: sfdprem
+  labels:
+    app.kubernetes.io/name: sas-business-orchestration-worker-sutraPOC
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 4195
+  selector:
+    app.kubernetes.io/name: sas-business-orchestration-worker-sutraPOC
+---
+
+########################################################################
+# section - deployment
+########################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sas-business-orchestration-worker-sutraPOC
+  namespace: sfdprem
+  labels:
+    app.kubernetes.io/name: sas-business-orchestration-worker-sutraPOC
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sas-business-orchestration-worker-sutraPOC
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: sas-business-orchestration-worker-sutraPOC
+    spec:
+      imagePullSecrets:
+        - name: sas-image-pull-secrets
+      containers:
+        - name: sas-business-orchestration-worker
+          image: sas-business-orchestration-worker
+          imagePullPolicy: "Always"
+          ports:
+            - name: http
+              containerPort: 4195
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: sas-business-orchestration-worker-sutraPOC
+              mountPath: /tmp
+          resources:
+            requests:
+              cpu: 2
+              memory: 2Gi
+            limits:
+              cpu: 2
+              memory: 2Gi
+          env:
+            - name: SAS_LOG_LEVEL
+              value: INFO
+            - name: SAS_LOG_LOCALE
+              value: en
+            - name: WORKLOAD_ENABLED_BY_INDEX
+              value: "0"
+            - name: WORK_DIR
+              value: /worker/work
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /internal/live
+              port: http
+              scheme: HTTP
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /internal/ready
+              port: http
+              scheme: HTTP
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 5
+          startupProbe:
+            failureThreshold: 180
+            httpGet:
+              path: /internal/live
+              port: http
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+      volumes:
+        - name: sas-business-orchestration-worker-sutraPOC
+          configMap:
+            name: sas-business-orchestration-worker-sutraPOC
+---
+
+########################################################################
+# section - ingress (optional, only needed if you want external access)
+########################################################################
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sas-business-orchestration-worker-sutraPOC
+  namespace: sfdprem
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  labels:
+    app.kubernetes.io/name: sas-business-orchestration-worker-sutraPOC
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "sutraPOC.sfdprem.svc.cluster.local"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sas-business-orchestration-worker-sutraPOC
+                port:
+                  number: 4195
+---
+
