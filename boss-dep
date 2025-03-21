@@ -1,0 +1,130 @@
+########################################################################
+# section - config map
+########################################################################
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sas-business-orchestration-worker
+  namespace: boss
+data:
+  project.yaml: |-
+    id: helloWorld
+    version: v1
+    workloads:
+      - flows:
+          - inputs:
+              - httpServer:
+                  path: /helloWorld
+                  allowedVerbs:
+                    - GET
+            processors:
+              - map:
+                  mapping: |
+                    root = "{\"hello\":\"world\"}"
+            outputs:
+              - response: {}
+---
+########################################################################
+# section - image pull secrets
+#####################################################################
+ 
+########################################################################
+# Create Service
+########################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: sas-business-orchestration-worker
+  namespace: boss
+  labels:
+    app.kubernetes.io/name: sas-business-orchestration-worker
+spec:
+  type: NodePort
+  ports:
+    - port: 8082
+      targetPort: 4195
+      nodePort: 30080
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: sas-business-orchestration-worker
+---
+########################################################################
+# Create Deployment
+########################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sas-business-orchestration-worker
+  namespace: boss
+  labels:
+    app.kubernetes.io/name: sas-business-orchestration-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sas-business-orchestration-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: sas-business-orchestration-worker
+    spec:
+      imagePullSecrets:
+        - name: my-registry-secret-boss
+      containers:
+        - name: sas-business-orchestration-worker
+          image: cr.sas.com/viya-4-x64_oci_linux_2-docker/sas-business-orchestration-worker:1.73.0-20241111.1731362212598
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - name: http
+              containerPort: 8082
+              protocol: TCP
+          volumeMounts:
+            - name: sas-business-orchestration-worker
+              mountPath: /tmp
+          resources:
+            requests:
+              memory: 60Mi
+              cpu: 0
+            limits:
+              cpu: 0
+              memory: 500Mi
+          env:
+            - name: SAS_LOG_FORMAT
+              value: plain
+            - name: SAS_LOG_LEVEL
+              value: TRACE
+            - name: SAS_LOG_LOCALE
+              value: en
+            - name: WORKLOAD_ENABLED_BY_INDEX
+              value: "0"
+        - name: sas-business-orchestration-worker-sb
+          image: cr.sas.com/viya-4-x64_oci_linux_2-docker/sas-business-orchestration-worker:1.73.0-20241111.1731362212598
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - name: http
+              containerPort: 8083
+          volumeMounts:
+            - name: shared-volume
+              mountPath: /shared-volume
+          resources:
+            requests:
+              memory: 60Mi
+              cpu: 0
+            limits:
+              cpu: 0
+              memory: 500Mi
+          env:
+            - name: SAS_LOG_LEVEL
+              value: TRACE
+            - name: SAS_LOG_LOCALE
+              value: en
+            - name: MODE
+              value: JAVA
+            - name: WORK_DIR
+              value: /work
+      volumes:
+        - name: sas-business-orchestration-worker
+          configMap:
+            name: sas-business-orchestration-worker
+        - name: shared-volume
+          emptyDir: {}
