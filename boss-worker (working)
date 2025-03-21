@@ -39,11 +39,10 @@ metadata:
   labels:
     app.kubernetes.io/name: sas-business-orchestration-worker
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 8082
       targetPort: 4195
-      nodePort: 30080
       protocol: TCP
   selector:
     app.kubernetes.io/name: sas-business-orchestration-worker
@@ -130,4 +129,16 @@ spec:
           emptyDir: {}
 
 
-http://localhost:8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+steps - 
+
+1.[sas@sasserver ~]$ kubectl get svc sas-business-orchestration-worker -n boss
+NAME                                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+sas-business-orchestration-worker   ClusterIP   10.102.94.27   <none>        8082/TCP   16h
+[sas@sasserver ~]$ kubectl exec -it sas-business-orchestration-worker-8589c9579b-f26hn -n boss -- /bin/bash
+Defaulted container "sas-business-orchestration-worker" out of: sas-business-orchestration-worker, sas-business-orchestration-worker-sb
+[sas@sas-business-orchestration-worker-8589c9579b-f26hn /]$ curl http://sas-business-orchestration-worker.boss.svc.cluster.local:8082/helloWorld
+{"hello":"world"}[sas@sas-business-orchestration-worker-8589c9579b-f26hn /]$  exit
+exit
+[sas@sasserver ~]$
+[sas@sasserver ~]$ kubectl port-forward svc/sas-business-orchestration-worker 8082:8082 -n boss
+Forwarding from 127.0.0.1:8082 -> 4195
