@@ -1,0 +1,140 @@
+
+
+id: evaluate_risk_financial_1
+version: v1
+label: "Evaluate Risk Financial"
+details: "Transform input fraud data to transaction format"
+workloads:
+  - label: "Transform Input JSON to Transaction JSON"
+    details: "Consumes input JSON and creates output transaction JSON"
+    flows:
+      - inputs:
+          - httpServer:
+              path: /v1/evaluate-risk-financial
+              allowedVerbs:
+                - POST
+        processors:
+          # Step 1: Transform input JSON to the required transaction JSON format
+          - map:
+              mapping: |
+                root = this
+                root.message = {}
+                root.message.request = {
+                  "restResponseFlg": this.restResponseFlg,
+                  "schemaName": this.schemaName,
+                  "messageClassificationName": this.messageClassificationName,
+                  "messageDtTm": this.messageDtTm,
+                  "messageDateTmUTC": this.messageDateTmUTC
+                }
+                root.message.solution = {
+                  "customerType": this.customerType,
+                  "originationType": this.originationType,
+                  "authenticationType": this.authenticationType,
+                  "channelType": this.channelType,
+                  "activityType": this.activityType
+                }
+                root.message.cardfinancial = {
+                  "type": this.cardType,
+                  "typedesc": this.cardTypedesc,
+                  "amount": this.amount,
+                  "usdAmount": this.usdAmount,
+                  "cardPresentInd": this.cardPresentInd,
+                  "customerPresentInd": this.customerPresentInd
+                }
+                root.message.merchant = {
+                  "name": this.merchantName,
+                  "state": this.merchantState,
+                  "acquiringBankIdentifer": this.acquiringBankIdentifier,
+                  "acquiringBankName": this.acquiringBankName
+                }
+                root.message.customer = {
+                  "identifier": this.customerIdentifier,
+                  "identifierDesc": this.customerIdentifierDesc,
+                  "name": this.customerName,
+                  "firstname": this.customerFirstname,
+                  "surname": this.customerSurname,
+                  "identity": this.customerIdentity,
+                  "identityType": this.customerIdentityType,
+                  "language": this.customerLanguage,
+                  "languageCode": this.customerLanguageCode,
+                  "type": this.customerTypeAdv,
+                  "joinDt": this.customerJoinDt,
+                  "birthDt": this.customerBirthDt,
+                  "nationality": this.customerNationality,
+                  "nationalityCode": this.customerNationalityCode,
+                  "address": this.customerAddress,
+                  "addressCity": this.customerAddressCity,
+                  "addressPostcode": this.customerAddressPostcode,
+                  "addressCountry": this.customerAddressCountry,
+                  "addressCountryCode": this.customerAddressCountryCode,
+                  "addressLastChangeDt": this.customerAddressLastChangeDt,
+                  "homePhone": this.customerHomePhone,
+                  "homePhoneLastChangeDt": this.customerHomePhoneLastChangeDt,
+                  "mobilePhone": this.customerMobilePhone,
+                  "mobilePhoneLastChangeDt": this.customerMobilePhoneLastChangeDt,
+                  "email": this.customerEmail,
+                  "emailLastChangeDt": this.customerEmailLastChangeDt,
+                  "employeeFlg": this.customerEmployeeFlg,
+                  "employerName": this.customerEmployerName,
+                  "employeeJobTitle": this.customerEmployeeJobTitle,
+                  "annualSalary": this.customerAnnualSalary,
+                  "salaryFrequency": this.customerSalaryFrequency,
+                  "maritalStatus": this.customerMaritalStatus,
+                  "residentialStatus": this.customerResidentialStatus
+                }
+                root.message.creditcard = {
+                  "number": this.creditCardNumber,
+                  "lastFourDigits": this.creditCardLastFourDigits,
+                  "type": this.creditCardType,
+                  "subType": this.creditCardSubType,
+                  "expirationMonth": this.creditCardExpirationMonth,
+                  "expirationYear": this.creditCardExpirationYear,
+                  "binCategory": this.creditCardBinCategory,
+                  "issuingBank": this.creditCardIssuingBank,
+                  "issuingCountry": this.creditCardIssuingCountry,
+                  "issuingCountryCode": this.creditCardIssuingCountryCode,
+                  "holderName": this.creditCardHolderName,
+                  "holderEmbossedName": this.creditCardHolderEmbossedName,
+                  "limit": this.creditCardLimit
+                }
+          - log:
+              level: INFO
+              message: "Successfully transformed fraud data into transaction JSON."
+
+          # Step 2: Convert the transformed JSON to Ion format before sending to the detection engine
+          - convertJSONToIon:
+              details: "Convert the transformed JSON data to Ion format."
+              label: "Convert to Ion"
+              inputJson: root.message  # Using the transformed message from the previous step
+
+          # Step 3: Send the Ion formatted message to SAS Detection Engine
+          - detectBehavior:
+              details: "Send the Ion formatted message to SAS Detection Engine."
+              label: "Send to SAS Engine"
+              retryCount: 2
+              retryWaitInMillis: 100
+              timeoutInMillis: 5000
+              tls:
+                caFile: "/path/to/ca-cert.pem"
+                certFile: "/path/to/client-cert.pem"
+                keyFile: "/path/to/client-key.pem"
+              url: "http://example.com"
+              enabled: true
+
+          # Step 4: Log the response and return it
+          - map:
+              mapping: |
+                root.response = this
+                if root.response.status == "success" then
+                  root.message = root.response.transformedMessage
+                else
+                  root.errorMessage = "Failed to process the transaction."
+          - log:
+              level: INFO
+              message: "Response from SAS Detection Engine processed."
+        
+        outputs:
+          - response:
+              data: root.message
+              status: 200
+              description: "Successfully processed transaction"
