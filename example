@@ -1,0 +1,42 @@
+flows:
+  - inputs:
+      - httpServer:
+          path: /example-flow-0
+          allowedVerbs:
+            - POST
+    processors:
+      - map:
+          mapping: |
+            root = this
+            root.income = match {
+              this.revenue > this.cost => "profit"
+              this.revenue < this.cost => "loss"
+              this.revenue == this.cost => "even"
+            }
+      - switch:
+          cases:
+            - check: this.income == "profit"
+              processors:
+                - map:
+                    mapping: |
+                      root = {}
+                      root.profit = this.revenue - this.cost
+                      root.message = "Keep it up!"
+                      root.month = this.month
+            - check: this.income == "loss"
+              processors:
+                - map:
+                    mapping: |
+                      root = {}
+                      root.loss = this.revenue - this.cost
+                      root.message = "Lost money!"
+                      root.month = this.month
+      - processors:
+          - map:
+              mapping: |
+                root = {}
+                root.even = this.revenue - this.cost
+                root.message = "Breaking even!"
+                root.month = this.month
+    outputs:
+      - response: {}
