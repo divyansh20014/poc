@@ -516,3 +516,6 @@ kubectl exec -it <pod-name> -n sas-sda-scr -c sas-sda-scr -- \
   -H "Content-Type: application/json" \
   -d '{"transaction": {"amount": 100}}'
 The lack of explicit configuration indicates it's using SAS's default SCR behavior where /execute is the standard endpoint for decision execution.
+
+
+TOKEN=$(curl -u admin:Orion123 -k "https://sasserver.demo.sas.com:9443/service/token?service=harbor-registry&scope=repository:sfdrepo/sampleorg:pull" | jq -r '.token')
