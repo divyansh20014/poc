@@ -519,3 +519,8 @@ The lack of explicit configuration indicates it's using SAS's default SCR behavi
 
 
 TOKEN=$(curl -u admin:Orion123 -k "https://sasserver.demo.sas.com:9443/service/token?service=harbor-registry&scope=repository:sfdrepo/sampleorg:pull" | jq -r '.token')
+
+
+
+curl -k -H "Authorization: Bearer $TOKEN" \
+  https://sasserver.demo.sas.com:9443/v2/sfdrepo/sampleorg/tags/list
