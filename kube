@@ -1,0 +1,28 @@
+Install kubectl on CentOS/RHEL
+Step 1: Download the latest release
+bash
+Copy code
+curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+Step 2: Make the binary executable
+bash
+Copy code
+chmod +x kubectl
+Step 3: Move it to your system path
+bash
+Copy code
+mv kubectl /usr/local/bin/
+Step 4: Verify installation
+bash
+Copy code
+kubectl version --client
+⚠️ Optional: Set up shell auto-completion (for better CLI experience)
+bash
+Copy code
+kubectl completion bash > /etc/bash_completion.d/kubectl
+source /etc/bash_completion
+📁 Where kubectl looks for the cluster config
+By default, it looks for your kubeconfig in:
+bash
+Copy code
+~/.kube/config
+If you don’t have this file, you’ll need to get it from your DevOps/admin team, or from Rancher if it's managing your Kubernetes cluster.
