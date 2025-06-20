@@ -68,3 +68,10 @@ flows:
     SAS_RWS_KAFKA_OUTPUT_TOPIC: "rws-output-transactions"
     SAS_RWS_KAFKA_ERROR_TOPIC: "rws-error-transactions"
     SAS_RWS_KAFKA_REJECT_TOPIC: "rws-reject-transactions"
+
+
+
+export BEARER=$(curl -k -X POST https://sasserver.demo.sas.com:443/SASLogon/oauth/token -H 'Accept: application/json' -H 'Content-type: application/x-www-form-urlencoded' -u "sas.ec:" -d 'grant_type=password&username=sas&password=Orion123' | jq -r '.access_token')
+ 
+ 
+curl -k -X POST "https://sasserver.demo.sas.com/alerts/config" -H "Authorization: Bearer $BEARER" -H "Content-Type: application/zip" --data-binary "@/home/sas/Race_Alert_configv3.zip"
