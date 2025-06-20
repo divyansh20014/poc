@@ -40,3 +40,31 @@ flows:
                 root.month = this.month
     outputs:
       - response: {}
+
+
+- op: replace
+  path: /data
+  value:
+    SAS_KAFKA_SERVER: "10.0.194.120:9092"
+    SAS_KAFKA_CONSUMER_DEBUG: ""
+    SAS_KAFKA_PRODUCER_DEBUG: ""
+    SAS_KAFKA_OFFSET: earliest
+    SAS_KAFKA_ENABLED: "true"
+    SAS_KAFKA_SECURITY_PROTOCOL: ""
+    SAS_KAFKA_ACKS: "2"
+    SAS_KAFKA_BATCH: ""
+    SAS_KAFKA_LINGER: ""
+    SAS_KAFKA_AUTO_CREATE_TOPICS: "true"
+    SAS_KAFKA_HOSTNAME_VERIFICATION: "false"
+    SAS_DETECTION_KAFKA_TOPIC: "input-Global,input-testing,input-sutrascripts,input-sfddemo"
+    SAS_DETECTION_KAFKA_TDR_TOPIC: "tdr-Global,tdr-testing,tdr-sutrascripts,tdr-sfddemo"
+    SAS_DETECTION_KAFKA_REJECTTOPIC: "reject-Global,reject-testing,reject-sutrascripts,reject-sfddemo"
+    SAS_TRIAGE_KAFKA_TDR_TOPICS: "tdr-sfddemo,tdr-testing,tdr-sutrascripts,tdr-Global"
+    SAS_TRANSACTION_TDR_TOPICS: "tdr-sfddemo,tdr-testing,tdr-sutrascripts,tdr-Global"
+    SAS_TRANSACTION_MARK_TOPIC: "transaction-topic-outbound"
+    SAS_RWS_KAFKA_BROKERS: "10.0.194.120:9092"
+    SAS_TRIAGE_KAFKA_OUTBOUND_TOPIC: "sas-triage-topic-outbound"
+    SAS_RWS_KAFKA_INPUT_TOPIC: "rws-input-transactions"
+    SAS_RWS_KAFKA_OUTPUT_TOPIC: "rws-output-transactions"
+    SAS_RWS_KAFKA_ERROR_TOPIC: "rws-error-transactions"
+    SAS_RWS_KAFKA_REJECT_TOPIC: "rws-reject-transactions"
