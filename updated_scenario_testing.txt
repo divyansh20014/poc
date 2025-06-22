@@ -1,0 +1,653 @@
+*************************************************************************
+Scenario 1:
+
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_001",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "CREDIT",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn1_001",
+      "transactionDateTimeUTC": "2025-02-12T06:00:00Z",
+      "transactionAmountLocalCurrency": 200000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_001",
+      "customerAccountBalanceLocalCurrency": ""
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "1AA25A1A1AA71A1"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+  
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_001",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "CREDIT",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn1_002",
+      "transactionDateTimeUTC": "2025-02-13T00:00:00Z",
+      "transactionAmountLocalCurrency": 200000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_001",
+      "customerAccountBalanceLocalCurrency": ""
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "1AA25A1A1AAE76E"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+  
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_001",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "CREDIT",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn1_003",
+      "transactionDateTimeUTC": "2025-02-14T09:00:00Z",
+      "transactionAmountLocalCurrency": 200000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_001",
+      "customerAccountBalanceLocalCurrency": ""
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "1AA25A00A1A123E7"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+  
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_001",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "CREDIT",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn1_004",
+      "transactionDateTimeUTC": "2025-02-16T00:00:00Z",
+      "transactionAmountLocalCurrency": 200000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_001",
+      "customerAccountBalanceLocalCurrency": ""
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "1AA31A5A1AA2A00E"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+
+
+*************************************************************************
+Scenario 2:
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_002",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "CREDIT",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn2_001",
+      "transactionDateTimeUTC": "2025-02-16T09:00:00Z",
+      "transactionAmountLocalCurrency": 4100000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_002",
+      "customerAccountBalanceLocalCurrency": 4200000
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "ACC_EXIM_INT_TEST_001"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+  
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_002",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "CREDIT",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn2_002",
+      "transactionDateTimeUTC": "2025-02-16T09:03:00Z",
+      "transactionAmountLocalCurrency": 3000000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_002",
+      "customerAccountBalanceLocalCurrency": 7200000
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "ACC_EXIM_INT_TEST_002"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+  
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_002",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "CREDIT",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn2_003",
+      "transactionDateTimeUTC": "2025-02-16T09:07:00Z",
+      "transactionAmountLocalCurrency": 100000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_002",
+      "customerAccountBalanceLocalCurrency": 7300000
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "ACC_EXIM_INT_TEST_003"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+  
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_002",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "CREDIT",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn2_004",
+      "transactionDateTimeUTC": "2025-02-16T09:11:00Z",
+      "transactionAmountLocalCurrency": 100000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_002",
+      "customerAccountBalanceLocalCurrency": 7400000
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "ACC_EXIM_INT_TEST_003"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+  
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_002",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "CREDIT",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn2_005",
+      "transactionDateTimeUTC": "2025-02-16T09:15:00Z",
+      "transactionAmountLocalCurrency": 100000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_002",
+      "customerAccountBalanceLocalCurrency": 7500000
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "ACC_EXIM_INT_TEST_004"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+  
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_002",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "CREDIT",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn2_006",
+      "transactionDateTimeUTC": "2025-02-16T09:19:00Z",
+      "transactionAmountLocalCurrency": 200000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_002",
+      "customerAccountBalanceLocalCurrency": 7700000
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "ACC_EXIM_INT_TEST_005"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+  
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_002",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "FUND TRANSFER",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn2_007",
+      "transactionDateTimeUTC": "2025-02-16T09:25:00Z",
+      "transactionAmountLocalCurrency": 5000000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_002",
+      "customerAccountBalanceLocalCurrency": 2700000
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "ACC_EXIM_INT_TEST_006"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+  
+  {
+    "Customer": {
+      "customerId": "CUST_EXIM_INT_TEST_002",
+      "customerType": ""
+    },
+    "Transaction": {
+      "transactionType": "FUND TRANSFER",
+      "transferType": "",
+      "transactionStatus": "",
+      "transactionID": "txn2_008",
+      "transactionDateTimeUTC": "2025-02-16T09:29:00Z",
+      "transactionAmountLocalCurrency": 2300000,
+      "transactionStatusDescription": ""
+    },
+    "CustomerAccount": {
+      "customerAccountNumberIban": "ACC_EXIM_INT_TEST_002",
+      "customerAccountBalanceLocalCurrency": 400000
+    },
+    "CounterPartyAccount": {
+      "counterPartyAccountNumberIban": "ACC_EXIM_INT_TEST_007"
+    },
+    "Device": {
+      "deviceId": "",
+      "deviceType": "",
+      "MACAddress": ""
+    }
+  }
+
+
+*************************************************************************
+Scenario 3:
+{
+  "Customer": {
+    "customerId": "CUST_EXIM_INT_TEST_003",
+    "customerType": ""
+  },
+  "CustomerAccount": {
+    "customerAccountNumberIban": "ACC_EXIM_INT_TEST_009",
+    "customerAccountBalanceLocalCurrency": ""
+  },
+  "Card": {
+    "cardNumber": "CARD_EXIM_INT_TEST_009",
+    "cardType": ""
+  },
+  "Transaction": {
+    "transactionType": "ECOM",
+    "transferType": "",
+    "transactionStatus": "",
+    "transactionID": "txn3_001",
+    "transactionDateTimeUTC": "2025-05-23T00:00:00Z",
+    "transactionAmountLocalCurrency": 200000,
+    "transactionStatusDescription": ""
+  },
+  "Device": {
+    "deviceId": "",
+    "deviceType": "",
+    "MACAddress": ""
+  },
+  "Merchant": {
+    "merchantId": "29054206411",
+    "merchantName": ""
+  },
+  "CounterPartyAccount": {
+    "counterPartyAccountNumberIban": ""
+  }
+}
+
+
+
+*************************************************************************
+Scenario 4:
+Transaction 1
+
+{
+  "Customer": {
+    "customerId": "CUST_EXIM_INT_TEST_004",
+    "customerType": ""
+  },
+  "Transaction": {
+    "transactionType": "FUND TRANSFER",
+    "transferType": "",
+    "transactionStatus": "",
+    "transactionID": "txn4_001",
+    "transactionDateTimeUTC": "2025-02-13T08:00:00Z",
+    "transactionAmountLocalCurrency": 300000,
+    "transactionStatusDescription": ""
+  },
+  "CustomerAccount": {
+    "customerAccountNumberIban": "ACC_EXIM_INT_TEST_004",
+    "customerAccountBalanceLocalCurrency": ""
+  },
+  "CounterPartyAccount": {
+    "counterPartyAccountNumberIban": ""
+  },
+  "Device": {
+    "deviceId": "",
+    "deviceType": "",
+    "MACAddress": "ECT.C5.ESA.TT"
+  }
+}
+
+{
+  "Customer": {
+    "customerId": "CUST_EXIM_INT_TEST_005",
+    "customerType": ""
+  },
+  "Transaction": {
+    "transactionType": "FUND TRANSFER",
+    "transferType": "",
+    "transactionStatus": "",
+    "transactionID": "txn4_002",
+    "transactionDateTimeUTC": "2025-02-13T09:30:00Z",
+    "transactionAmountLocalCurrency": 300000,
+    "transactionStatusDescription": ""
+  },
+  "CustomerAccount": {
+    "customerAccountNumberIban": "ACC_EXIM_INT_TEST_005",
+    "customerAccountBalanceLocalCurrency": ""
+  },
+  "CounterPartyAccount": {
+    "counterPartyAccountNumberIban": ""
+  },
+  "Device": {
+    "deviceId": "",
+    "deviceType": "",
+    "MACAddress": "ECT.C5.ESA.TT"
+  }
+}
+
+
+*************************************************************************
+Scenario 5:
+
+{
+  "Customer": {
+    "customerId": "CUST_EXIM_INT_TEST_006",
+    "customerType": ""
+  },
+  "CustomerAccount": {
+    "customerAccountNumberIban": "ACC_EXIM_INT_TEST_006",
+    "customerAccountBalanceLocalCurrency": ""
+  },
+  "Card": {
+    "cardNumber": "CARD_EXIM_INT_TEST_006",
+    "cardType": ""
+  },
+  "Transaction": {
+    "transactionType": "POS",
+    "transferType": "",
+    "transactionStatus": "",
+    "transactionID": "txn5_001",
+    "transactionDateTimeUTC": "2025-05-25T08:00:00Z",
+    "transactionAmountLocalCurrency": 100000,
+    "transactionStatusDescription": ""
+  },
+  "Device": {
+    "deviceId": "",
+    "deviceType": "",
+    "MACAddress": ""
+  },
+  "Merchant": {
+    "merchantId": "",
+    "merchantName": ""
+  },
+  "CounterPartyAccount": {
+    "counterPartyAccountNumberIban": ""
+  }
+}
+
+
+{
+  "Customer": {
+    "customerId": "CUST_EXIM_INT_TEST_006",
+    "customerType": ""
+  },
+  "CustomerAccount": {
+    "customerAccountNumberIban": "ACC_EXIM_INT_TEST_006",
+    "customerAccountBalanceLocalCurrency": ""
+  },
+  "Card": {
+    "cardNumber": "CARD_EXIM_INT_TEST_006",
+    "cardType": ""
+  },
+  "Transaction": {
+    "transactionType": "POS",
+    "transferType": "",
+    "transactionStatus": "",
+    "transactionID": "txn5_002",
+    "transactionDateTimeUTC": "2025-05-25T08:10:00Z",
+    "transactionAmountLocalCurrency": 100000,
+    "transactionStatusDescription": ""
+  },
+  "Device": {
+    "deviceId": "",
+    "deviceType": "",
+    "MACAddress": ""
+  },
+  "Merchant": {
+    "merchantId": "",
+    "merchantName": ""
+  },
+  "CounterPartyAccount": {
+    "counterPartyAccountNumberIban": ""
+  }
+}
+
+{
+  "Customer": {
+    "customerId": "CUST_EXIM_INT_TEST_006",
+    "customerType": ""
+  },
+  "CustomerAccount": {
+    "customerAccountNumberIban": "ACC_EXIM_INT_TEST_006",
+    "customerAccountBalanceLocalCurrency": ""
+  },
+  "Card": {
+    "cardNumber": "CARD_EXIM_INT_TEST_006",
+    "cardType": ""
+  },
+  "Transaction": {
+    "transactionType": "POS",
+    "transferType": "",
+    "transactionStatus": "",
+    "transactionID": "txn5_003",
+    "transactionDateTimeUTC": "2025-05-25T08:13:00Z",
+    "transactionAmountLocalCurrency": 100000,
+    "transactionStatusDescription": ""
+  },
+  "Device": {
+    "deviceId": "",
+    "deviceType": "",
+    "MACAddress": ""
+  },
+  "Merchant": {
+    "merchantId": "",
+    "merchantName": ""
+  },
+  "CounterPartyAccount": {
+    "counterPartyAccountNumberIban": ""
+  }
+}
+
+{
+  "Customer": {
+    "customerId": "CUST_EXIM_INT_TEST_006",
+    "customerType": ""
+  },
+  "CustomerAccount": {
+    "customerAccountNumberIban": "ACC_EXIM_INT_TEST_006",
+    "customerAccountBalanceLocalCurrency": ""
+  },
+  "Card": {
+    "cardNumber": "CARD_EXIM_INT_TEST_006",
+    "cardType": ""
+  },
+  "Transaction": {
+    "transactionType": "POS",
+    "transferType": "",
+    "transactionStatus": "",
+    "transactionID": "txn5_004",
+    "transactionDateTimeUTC": "2025-05-25T08:15:00Z",
+    "transactionAmountLocalCurrency": 200000,
+    "transactionStatusDescription": ""
+  },
+  "Device": {
+    "deviceId": "",
+    "deviceType": "",
+    "MACAddress": ""
+  },
+  "Merchant": {
+    "merchantId": "",
+    "merchantName": ""
+  },
+  "CounterPartyAccount": {
+    "counterPartyAccountNumberIban": ""
+  }
+}
+
+
+*************************************************************************
+Scenario 6:
+
+{
+  "Customer": {
+    "customerId": "CUST_EXIM_INT_TEST_007",
+    "customerType": ""
+  },
+  "Device": {
+    "deviceId": "",
+    "deviceType": "",
+    "MACAddress": ""
+  },
+  "Transaction": {
+    "transactionType": "CUST DETAIL CHANGE",
+    "transferType": "EMAIL CHANGE",
+    "transactionStatus": "",
+    "transactionID": "txn6_001",
+    "transactionDateTimeUTC": "2025-05-10T00:00:00Z"
+  }
+}
+
+{
+  "Customer": {
+    "customerId": "CUST_EXIM_INT_TEST_007",
+    "customerType": ""
+  },
+  "Device": {
+    "deviceId": "",
+    "deviceType": "",
+    "MACAddress": ""
+  },
+  "Transaction": {
+    "transactionType": "CUST DETAIL CHANGE",
+    "transferType": "PHONE CHANGE",
+    "transactionStatus": "",
+    "transactionID": "txn6_002",
+    "transactionDateTimeUTC": "2025-05-11T00:00:00Z"
+  }
+}
+
+{
+  "Customer": {
+    "customerId": "CUST_EXIM_INT_TEST_007",
+    "customerType": ""
+  },
+  "Device": {
+    "deviceId": "",
+    "deviceType": "",
+    "MACAddress": ""
+  },
+  "Transaction": {
+    "transactionType": "CUST DETAIL CHANGE",
+    "transferType": "EMAIL CHANGE",
+    "transactionStatus": "",
+    "transactionID": "txn6_003",
+    "transactionDateTimeUTC": "2025-05-12T00:00:00Z"
+  }
+}
+
