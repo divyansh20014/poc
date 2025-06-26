@@ -1,0 +1,478 @@
+apiVersion: v1
+data:
+  externaldata.yaml: |-
+    id: customer_query
+    version: v1
+
+    workloads:
+      - flows:
+          - label: "Customer Data Demographics Flow"
+            inputs:
+              - httpServer:
+                  path: /customer/data/{id}
+                  allowedVerbs:
+                    - GET
+                    - POST
+
+            processors:
+              - log:
+                  level: INFO
+                  message: 'Received customer data request for customer id: ${! metadata("id") }'
+
+              - map:
+                  mapping: |
+                    root = {}
+
+              - sql:
+                  driver: postgres
+                  connectionString: "host=sasserver.demo.sas.com port=5432 user=dbmsowner password=VR60wKuwOQrHI53uQZcMfdg6 dbname=SharedServices sslmode=disable"
+                  query: >
+                    SELECT customer_id, name, dob, city, postal_code, country, mobile_phone, email, marital_status, customer_branch, occupation, cust_monthly_income, nationality, gender 
+                    FROM external_demo.exim_customer 
+                    WHERE customer_id = '${! metadata("id") }';
+                  allowQueryInterpolation: true
+                  allowQuerySharedServices: true
+                  parseQueryValidationEnabled: true
+
+              - log:
+                  level: INFO
+                  message: "Query for customer is complete"
+
+              - map:
+                  mapping: |
+                    root.fields = [
+                      {"name": "CustomerID", "value": this._sql.rows.0.0},
+                      {"name": "Name", "value": this._sql.rows.0.1},
+                      {"name": "DateOfBirth", "value": this._sql.rows.0.2},
+                      {"name": "City", "value": this._sql.rows.0.3},
+                      {"name": "PostalCode", "value": this._sql.rows.0.4},
+                      {"name": "Country", "value": this._sql.rows.0.5},
+                      {"name": "MobilePhone", "value": this._sql.rows.0.6},
+                      {"name": "Email", "value": this._sql.rows.0.7},
+                      {"name": "MaritalStatus", "value": this._sql.rows.0.8},
+                      {"name": "CustomerBranch", "value": this._sql.rows.0.9},
+                      {"name": "Occupation", "value": this._sql.rows.0.10},
+                      {"name": "MonthlyIncome", "value": this._sql.rows.0.11},
+                      {"name": "Nationality", "value": this._sql.rows.0.12},
+                      {"name": "Gender", "value": this._sql.rows.0.13}
+                    ]
+            outputs:
+              - stdout: {}
+              - response: {}
+              
+          - label: "Customer Data Metadata Flow"
+            inputs:
+              - httpServer:
+                  path: /customer/meta
+                  allowedVerbs:
+                    - GET
+                    - POST
+
+            processors:
+              - log:
+                  level: INFO
+                  message: "Received customer metadata request"
+
+              - map:
+                  mapping: |
+                    root.fields = [
+                      {"name": "CustomerID", "label": "Customer ID"},
+                      {"name": "Name", "label": "Full Name"},
+                      {"name": "DateOfBirth", "label": "Date of Birth", "fieldType": "date"},
+                      {"name": "City", "label": "City"},
+                      {"name": "PostalCode", "label": "Postal Code"},
+                      {"name": "Country", "label": "Country"},
+                      {"name": "MobilePhone", "label": "Mobile Phone"},
+                      {"name": "Email", "label": "Email Address"},
+                      {"name": "MaritalStatus", "label": "Marital Status"},
+                      {"name": "CustomerBranch", "label": "Customer Branch"},
+                      {"name": "Occupation", "label": "Occupation"},
+                      {"name": "MonthlyIncome", "label": "Monthly Income", "fieldType": "numeric"},
+                      {"name": "Nationality", "label": "Nationality"},
+                      {"name": "Gender", "label": "Gender"}
+                    ]
+            outputs:
+              - response: {}
+              
+          - label: "Account Data Demographics Flow"
+            inputs:
+              - httpServer:
+                  path: /account/data/{iban}
+                  allowedVerbs:
+                    - GET
+                    - POST
+
+            processors:
+              - log:
+                  level: INFO
+                  message: 'Received account data request for IBAN: ${! metadata("iban") }'
+
+              - map:
+                  mapping: |
+                    root = {}
+
+              - sql:
+                  driver: postgres
+                  connectionString: "host=sasserver.demo.sas.com port=5432 user=dbmsowner password=VR60wKuwOQrHI53uQZcMfdg6 dbname=SharedServices sslmode=disable"
+                  query: >
+                    SELECT account_num, customer_id, account_type, account_holder_name, account_status, account_opening_date, pep_flag, account_available_balance 
+                    FROM external_demo.exim_account 
+                    WHERE account_num = '${! metadata("iban") }';
+                  allowQueryInterpolation: true
+                  allowQuerySharedServices: true
+                  parseQueryValidationEnabled: true
+
+              - log:
+                  level: INFO
+                  message: "Query for account is complete"
+
+              - map:
+                  mapping: |
+                    root.fields = [
+                      {"name": "AccountNumber", "value": this._sql.rows.0.0},
+                      {"name": "CustomerID", "value": this._sql.rows.0.1},
+                      {"name": "AccountType", "value": this._sql.rows.0.2},
+                      {"name": "AccountHolderName", "value": this._sql.rows.0.3},
+                      {"name": "AccountStatus", "value": this._sql.rows.0.4},
+                      {"name": "AccountOpeningDate", "value": this._sql.rows.0.5},
+                      {"name": "PEPFlag", "value": this._sql.rows.0.6},
+                      {"name": "AvailableBalance", "value": this._sql.rows.0.7}
+                    ]
+            outputs:
+              - stdout: {}
+              - response: {}
+              
+          - label: "Account Data Metadata Flow"
+            inputs:
+              - httpServer:
+                  path: /account/meta
+                  allowedVerbs:
+                    - GET
+                    - POST
+
+            processors:
+              - log:
+              
+                  level: INFO
+                  message: "Received account metadata request"
+
+              - map:
+                  mapping: |
+                    root.fields = [
+                      {"name": "AccountNumber", "label": "Account Number"},
+                      {"name": "CustomerID", "label": "Customer ID"},
+                      {"name": "AccountType", "label": "Account Type"},
+                      {"name": "AccountHolderName", "label": "Account Holder Name"},
+                      {"name": "AccountStatus", "label": "Account Status"},
+                      {"name": "AccountOpeningDate", "label": "Opening Date", "fieldType": "date"},
+                      {"name": "PEPFlag", "label": "PEP Flag", "fieldType": "boolean"},
+                      {"name": "AvailableBalance", "label": "Available Balance", "fieldType": "numeric"}
+                    ]
+            outputs:
+              - response: {}
+              
+          - label: "Contact Data Flow"
+            inputs:
+              - httpServer:
+                  path: /contact/data/{id}
+                  allowedVerbs:
+                    - GET
+                    - POST
+
+            processors:
+              - log:
+                  level: INFO
+                  message: 'Received contact data request for customer id: ${! metadata("id") }'
+
+              - map:
+                  mapping: |
+                    root = {}
+
+              - sql:
+                  driver: postgres
+                  connectionString: "host=sasserver.demo.sas.com port=5432 user=dbmsowner password=VR60wKuwOQrHI53uQZcMfdg6 dbname=SharedServices sslmode=disable"
+                  query: >
+                    SELECT customer_id, name, mobile_phone, email, country, city 
+                    FROM external_demo.exim_customer 
+                    WHERE customer_id = '${! metadata("id") }';
+                  allowQueryInterpolation: true
+                  allowQuerySharedServices: true
+                  parseQueryValidationEnabled: true
+
+              - log:
+                  level: INFO
+                  message: "Query for contact is complete"
+
+              - map:
+                  mapping: |
+                    root.fields = [
+                      {"name": "CustomerID", "value": this._sql.rows.0.0},
+                      {"name": "Name", "value": this._sql.rows.0.1},
+                      {"name": "MobilePhone", "value": this._sql.rows.0.2},
+                      {"name": "Email", "value": this._sql.rows.0.3},
+                      {"name": "Country", "value": this._sql.rows.0.4},
+                      {"name": "City", "value": this._sql.rows.0.5}
+                    ]
+            outputs:
+              - stdout: {}
+              - response: {}
+
+          - label: "Contact Data Metadata Flow"
+            inputs:
+              - httpServer:
+                  path: /contact/meta
+                  allowedVerbs:
+                    - GET
+                    - POST
+
+            processors:
+              - log:
+                  level: INFO
+                  message: "Received contact metadata request"
+
+              - map:
+                  mapping: |
+                    root.fields = [
+                      {"name": "CustomerID", "label": "Customer ID"},
+                      {"name": "Name", "label": "Full Name"},
+                      {"name": "MobilePhone", "label": "Mobile Phone"},
+                      {"name": "Email", "label": "Email Address"},
+                      {"name": "Country", "label": "Country"},
+                      {"name": "City", "label": "City"}
+                    ]
+            outputs:
+              - response: {}
+
+          - label: "Card Data Demographics Flow"
+            inputs:
+              - httpServer:
+                  path: /card/data/{card_num}
+                  allowedVerbs:
+                    - GET
+                    - POST
+
+            processors:
+              - log:
+                  level: INFO
+                  message: 'Received card data request for card number: ${! metadata("card_num") }'
+
+              - map:
+                  mapping: |
+                    root = {}
+
+              - sql:
+                  driver: postgres
+                  connectionString: "host=sasserver.demo.sas.com port=5432 user=dbmsowner password=VR60wKuwOQrHI53uQZcMfdg6 dbname=SharedServices sslmode=disable"
+                  query: >
+                    SELECT card_num, customer_id, cardholder_name, card_status, card_credit_limit, card_issuing_date, card_type, card_network
+                    FROM external_demo.exim_cards
+                    WHERE card_num = '${! metadata("card_num") }';
+                  allowQueryInterpolation: true
+                  allowQuerySharedServices: true
+                  parseQueryValidationEnabled: true
+
+              - log:
+                  level: INFO
+                  message: "Query for card data is complete"
+
+              - map:
+                  mapping: |
+                    root.fields = [
+                      {"name": "CardNumber", "value": this._sql.rows.0.0},
+                      {"name": "CustomerID", "value": this._sql.rows.0.1},
+                      {"name": "CardholderName", "value": this._sql.rows.0.2},
+                      {"name": "CardStatus", "value": this._sql.rows.0.3},
+                      {"name": "CreditLimit", "value": this._sql.rows.0.4},
+                      {"name": "IssuingDate", "value": this._sql.rows.0.5},
+                      {"name": "CardType", "value": this._sql.rows.0.6},
+                      {"name": "CardNetwork", "value": this._sql.rows.0.7}
+                    ]
+            outputs:
+              - stdout: {}
+              - response: {}
+
+          - label: "Card Data Metadata Flow"
+            inputs:
+              - httpServer:
+                  path: /card/meta
+                  allowedVerbs:
+                    - GET
+                    - POST
+
+            processors:
+              - log:
+                  level: INFO
+                  message: "Received card metadata request"
+
+              - map:
+                  mapping: |
+                    root.fields = [
+                      {"name": "CardNumber", "label": "Card Number"},
+                      {"name": "CustomerID", "label": "Customer ID"},
+                      {"name": "CardholderName", "label": "Cardholder Name"},
+                      {"name": "CardStatus", "label": "Card Status"},
+                      {"name": "CreditLimit", "label": "Credit Limit", "fieldType": "numeric"},
+                      {"name": "IssuingDate", "label": "Issuing Date", "fieldType": "date"},
+                      {"name": "CardType", "label": "Card Type"},
+                      {"name": "CardNetwork", "label": "Card Network"}
+                    ]
+            outputs:
+              - response: {}
+
+          - label: "Alert data Flow"
+            inputs:
+              - httpServer:
+                  path: /access_token
+                  allowedVerbs:
+                    - GET
+            processors:
+              - map:
+                  mapping: |
+                    root = "grant_type=password&username=sas&password=Orion123"
+              - http:
+                  url: http://sasserver.demo.sas.com/SASLogon/oauth/token
+                  verb: POST
+                  timeout: 5s
+                  parallel: false
+                  headers:
+                    - key: Accept
+                      value: application/json
+                    - key: Content-Type
+                      value: application/x-www-form-urlencoded
+                    - key: Authorization
+                      value: Basic c2FzLmVjOg==
+            outputs:
+              - response: {}
+
+          - label: "Triage data Flow"
+            inputs:
+              - httpServer:
+                  path: /alert/rulesFired/{id}
+                  allowedVerbs:
+                    - GET
+                    - POST
+            processors:
+              - log:
+                  level: INFO
+                  message: "Received request with metadata ${!metadata()}"
+              - log:
+                  level: INFO
+                  message: "Received rules fired data request for ID ${!metadata('id')}"
+              - log:
+                  level: INFO
+                  message: "Received rules fired data request for TYPE ${!metadata('transactionTypeID')}"
+              - log:
+                  level: INFO
+                  message: '### RETRIEVING ACCESS TOKEN FROM CACHE ###'
+              - cacheLocal:
+                  cacheEntries:
+                    - key: access_token
+                  operation: get
+                  prefix: ""
+                  ttl: 60m
+              - log:
+                  level: INFO
+                  message: "CACHE 1: '${!metadata('CacheResponse').parse_json().CacheEntries.access_token}'"
+              - switch:
+                  cases:
+                    - check: metadata('CacheResponse').parse_json().Status == "Error"
+                      processors:
+                        - log:
+                            level: INFO
+                            message: '### NO TOKEN PATH ###'
+                        - branch:
+                            requestMap: ""
+                            processors:
+                              - http:
+                                  url: http://localhost:4195/access_token
+                                  verb: GET
+                                  timeout: 5s
+                                  parallel: false
+                            resultMap: |
+                              meta access_token = this.access_token
+                        - cacheLocal:
+                            cacheEntries:
+                              - key: access_token
+                                value: ${!metadata('access_token')}
+                            operation: set
+                            prefix: ""
+                            ttl: 60m
+                        - log:
+                            level: INFO
+                            message: "CACHE 2: '${!metadata('access_token')}'"
+              - switch:
+                  cases:
+                    - check: metadata('CacheResponse').parse_json().Status == "Ok"
+                      processors:
+                        - log:
+                            level: INFO
+                            message: "CACHE 3: '${!metadata('CacheResponse').parse_json().CacheEntries.access_token}'"
+              - http:
+                  url: http://sasserver.demo.sas.com/alertsTransaction/transactions/${!metadata('id')}
+                  verb: GET
+                  timeout: 1s
+                  parallel: false
+                  headers:
+                    - key: Accept
+                      value: application/json
+                    - key: Content-Type
+                      value: application/json
+                    - key: Authorization
+                      value: Bearer ${!metadata('CacheResponse').parse_json().CacheEntries.access_token}
+              - log:
+                  level: INFO
+                  message: "TRIAGE REST RESPONSE: ${!content()}"
+              - map:
+                  mapping: |
+                    root = this.transactionMessage.message.sas.rulefired
+              - unpack: {}
+              - branch:
+                  requestMap: root = this
+                  processors:
+                    - log:
+                        level: INFO
+                        message: "UNPACKED MESSAGES: ${!content()}"
+                    - http:
+                        url: http://sasserver.demo.sas.com/detectionDefinition/rules/${!ruleIdentifier}
+                        verb: GET
+                        timeout: 5s
+                        parallel: true
+                        headers:
+                          - key: Accept
+                            value: application/json
+                          - key: Content-Type
+                            value: application/vnd.sas.detection.rule.parsed+json
+                          - key: Authorization
+                            value: Bearer ${!metadata('CacheResponse').parse_json().CacheEntries.access_token}
+                    - log:
+                        level: INFO
+                        message: "SFD REST RESPONSE: ${!content()}"
+                    - map:
+                        mapping: |
+                          root.name = this.name
+                          root.description = this.description
+                  resultMap: |
+                    root.name = this.name
+                    root.description = this.description
+              - pack:
+                  format: jsonArray
+              - map:
+                  mapping: |
+                    root.rulefired = this
+            outputs:
+              - response: {}
+
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"externaldata.yaml":"id: enrichment\nversion: v1\nworkloads:\n  - flows:\n      - inputs:\n          - httpServer:\n               path: /contact/data/{id}\n               allowedVerbs:\n                 - GET\n                 - POST\n        processors:\n          - log:\n              level: INFO\n              message: \"received contact data request\"\n          - map:\n              mapping: |\n                root.fields = [\n                     {\"name\": \"provider\", \"value\": \"Powered by SAS® Business Orchestration Services\"},\n                     {\"name\": \"name\", \"value\": \"Kenon Ickovicz\"},\n                     {\"name\": \"dob\", \"value\": \"12/12/12\"},\n                     {\"name\": \"ssn\", \"value\": \"1234256789\"},\n                     {\"name\": \"creditScore\", \"value\": 777},\n                     {\"name\": \"city\", \"value\": \"Lorraine\"},\n                     {\"name\": \"state\", \"value\": \"Grand Est\"},\n                     {\"name\": \"streetAddress\", \"value\": \"678 Rue de l'Est\"},\n                     {\"name\": \"email\", \"value\": \"Kenon.Ickovicz@nous.enterprise.fr\"},\n                     {\"name\": \"phone\", \"value\": \"(758) 280-0285 x3540\"} \n                     ]\n        outputs:\n          - response: {}\n      - inputs:\n          - httpServer:\n              path: /contact/meta\n              allowedVerbs:\n                - GET\n                - POST\n        processors:\n          - log:\n              level: INFO\n              message: \"received contact metadata request\"\n          - map:\n              mapping: |\n                root.fields = [\n                     {\"name\": \"provider\", \"label\": \"Provider\"},\n                     {\"name\": \"name\", \"label\": \"Name\"},\n                     {\"name\": \"dob\", \"label\": \"Date of birth\", \"fieldType\": \"date\"},\n                     {\"name\": \"ssn\", \"label\": \"Social security number\"},\n                     {\"name\": \"creditScore\", \"label\": \"Credit score\", \"fieldType\": \"number\"},\n                     {\"name\": \"city\", \"label\": \"City\"},\n                     {\"name\": \"state\", \"label\": \"State/Province\"},\n                     {\"name\": \"streetAddress\", \"label\": \"Street Address\"},\n                     {\"name\": \"email\", \"label\": \"Email Address\"},\n                     {\"name\": \"phone\", \"label\": \"Phone\"} \n                     ]\n        outputs:\n          - response: {}"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"sas.com/admin":"cluster-local","sas.com/deployment":"sas-viya"},"name":"sas-alerts-external-data-mb695t4h2h","namespace":"viya"}}
+  creationTimestamp: "2024-04-29T10:00:49Z"
+  labels:
+    k8slens-edit-resource-version: v1
+    sas.com/admin: cluster-local
+    sas.com/deployment: sas-viya
+  name: sas-alerts-external-data-mb695t4h2h
+  namespace: viya
+  resourceVersion: "116361226"
+  uid: 8a269d4b-4677-44fb-9a9e-8dca66ece427
